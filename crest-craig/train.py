@@ -7,7 +7,7 @@ import numpy as np
 import torch
 
 from utils import get_args
-
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 # Ignore future warnings from numpy
 simplefilter(action="ignore", category=FutureWarning)
 np.seterr(all="ignore")
@@ -25,8 +25,8 @@ import torch.optim
 import torch.utils.data
 import torchvision
 
-from datasets import IndexedDataset
-from models import *
+from datasets import IndexedDataset, ArabicIndexedDataset
+# from models import *
 
 # Use CUDA if available and set random seed for reproducibility
 if torch.cuda.is_available():
@@ -66,64 +66,74 @@ args.logger.info("Arguments: {}".format(args))
 args.logger.info("Time: {}".format(time.strftime("%Y-%m-%d %H:%M:%S")))
 
 def main(args):
-    train_dataset = IndexedDataset(args, train=True, train_transform=True)
-    args.train_size = len(train_dataset)
-    val_loader = torch.utils.data.DataLoader(
-        IndexedDataset(args, train=False),
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers,
-        pin_memory=True,
-    )
+    id2label = {
+        0: "MSA",
+        1: "MGH",
+        2: "EGY",
+        3: "LEV",
+        4: "IRQ",
+        5: "GLF"
 
-    model = None # load model here
+    }
+    label2id = {
+        "MSA": 0,
+        "MGH": 1,
+        "EGY": 2,
+        "LEV": 3,
+        "IRQ": 4,
+        "GLF": 5
 
-    # if args.arch == 'resnet20':
-    #     model = ResNet20(num_classes=args.num_classes)
-    # elif args.arch == 'resnet18':
-    #     model = ResNet18(num_classes=args.num_classes)
-    # elif args.arch == 'resnet50':
-    #     model = torchvision.models.resnet50(num_classes=args.num_classes)
-    # else:
-    #     raise NotImplementedError(f"Architecture {args.arch} not implemented.")
+    }
+    if args.arch == "transformer":
 
-    from trainers import CRESTTrainer
-    trainer = CRESTTrainer(
-        args,
-        model,
-        train_dataset,
-        val_loader,
-    )
+        # Load datasets
+        train_dataset = ArabicIndexedDataset(args, train=True)
+        val_dataset = ArabicIndexedDataset(args, train=False)
+        val_loader = torch.utils.data.DataLoader(
+            val_dataset,
+            batch_size=args.batch_size,
+            shuffle=False,  # Typically, you don't shuffle the validation data
+            num_workers=args.num_workers,
+            pin_memory=True
+        )
 
+        model = AutoModelForSequenceClassification.from_pretrained(
+            'CAMeL-Lab/bert-base-arabic-camelbert-mix',
+            num_labels=6,
+            id2label=id2label,
+            label2id=label2id
+        )
+    else:
+        raise NotImplementedError(f"Architecture {args.arch} not implemented.")
+
+
+    if args.selection_method == "none":
+        from trainers import BaseTrainer
+        trainer = BaseTrainer(
+            args,
+            model,
+            train_dataset,
+            val_loader,
+        )
+    elif args.selection_method == "random":
+        from trainers import RandomTrainer
+        trainer = RandomTrainer(
+            args,
+            model,
+            train_dataset,
+            val_loader,
+        )
+    elif args.selection_method == "crest":
+        from trainers import CRESTTrainer
+        trainer = CRESTTrainer(
+            args,
+            model,
+            train_dataset,
+            val_loader,
+        )
+    else:
+        raise NotImplementedError(f"Selection method {args.selection_method} not implemented.")
     trainer.train()
-
-    # if args.selection_method == "none":
-    #     from trainers import BaseTrainer
-    #     trainer = BaseTrainer(
-    #         args,
-    #         model,
-    #         train_dataset,
-    #         val_loader,
-    #     )
-    # elif args.selection_method == "random":
-    #     from trainers import RandomTrainer
-    #     trainer = RandomTrainer(
-    #         args,
-    #         model,
-    #         train_dataset,
-    #         val_loader,
-    #     )
-    # elif args.selection_method == "crest":
-    #     from trainers import CRESTTrainer
-    #     trainer = CRESTTrainer(
-    #         args,
-    #         model,
-    #         train_dataset,
-    #         val_loader,
-    #     )
-    # else:
-    #     raise NotImplementedError(f"Selection method {args.selection_method} not implemented.")
-    
 
 if __name__ == "__main__":
     main(args)

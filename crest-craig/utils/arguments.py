@@ -14,9 +14,9 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     # Default arguments for training ResNet. Change arguments for training CamelBERT
-    parser.add_argument("--arch", default="resnet20", choices=['resnet20', 'resnet18', 'resnet50'],
+    parser.add_argument("--arch", default="transformer", choices=['transformer','resnet20', 'resnet18', 'resnet50'],
         help="model architecture")
-    parser.add_argument('--data_dir', default='~/data')
+    parser.add_argument('--data_dir', default='./data')
     parser.add_argument('--dataset', default='cifar10', choices=['cifar10', 'cifar100','tinyimagenet'],
                         help='dataset: ' + ' (default: cifar10)')
     parser.add_argument("--num_workers",default=4, type=int,
