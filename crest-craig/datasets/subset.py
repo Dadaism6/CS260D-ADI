@@ -208,7 +208,7 @@ class SubsetGenerator:
 
 
 class WeightedSubset(Dataset):
-    r"""
+    """
     Subset of a dataset at specified indices.
     Args:
         dataset (Dataset): The whole Dataset

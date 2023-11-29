@@ -13,7 +13,7 @@ def get_args():
 
     parser = argparse.ArgumentParser()
 
-    # General options
+    # Default arguments for training ResNet. Change arguments for training CamelBERT
     parser.add_argument("--arch", default="resnet20", choices=['resnet20', 'resnet18', 'resnet50'],
         help="model architecture")
     parser.add_argument('--data_dir', default='~/data')
@@ -39,7 +39,7 @@ def get_args():
 
     parser.add_argument("--selection_method", default="crest", choices=['none', 'random', 'crest'],
         help="subset selection method")
-    parser.add_argument("--smtk", type=int, help="smtk", default=0)
+    parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")
     parser.add_argument("--lr_milestones", type=int, nargs='+', default=[100,150])
     parser.add_argument("--gamma", type=float, default=0.1, help="learning rate decay parameter")
