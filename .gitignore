@@ -1,0 +1,7 @@
+*.log
+*.pyc
+*.json
+*.txt
+
+wandb/
+.idea/

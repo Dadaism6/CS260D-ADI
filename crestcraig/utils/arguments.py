@@ -37,7 +37,7 @@ def get_args():
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
-    parser.add_argument("--selection_method", default="crest", choices=['none', 'random', 'crest'],
+    parser.add_argument("--selection_method", default="random", choices=['none', 'random', 'crest'],
         help="subset selection method")
     parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")
@@ -57,6 +57,10 @@ def get_args():
         help="clean the cache after iterating over the dataset")
 
     # Crest options
+    parser.add_argument("--save-subset", default=True, type=parse_bool, const=True, nargs='?',
+                        help="save select subset to subset dir")
+    parser.add_argument("--save-subset-dir", default="./subsetoutputs", type=str,
+                        help="The directory used to save selected subset")
     parser.add_argument("--approx_moment", default=True, type=parse_bool, const=True, nargs='?',
         help="use momentum in approximation")
     parser.add_argument("--approx_with_coreset", default=True, type=parse_bool, const=True, nargs='?',
@@ -88,7 +92,7 @@ def get_args():
     parser.add_argument('--min_train_size', default=40000, type=int)
 
     # others
-    parser.add_argument('--use_wandb', default=False, type=parse_bool, const=True, nargs='?')
+    parser.add_argument('--use_wandb', default=True, type=parse_bool, const=True, nargs='?')
 
     args = parser.parse_args()
 

@@ -42,7 +42,12 @@ else:
 
 if args.use_wandb:
     import wandb
+    api_key = "6048623673469aa435e5c18e4c00a653edc76a5c"
+    wandb.login(key=api_key)
     wandb.init(project="crest", config=args, name=args.save_dir.split('/')[-1])
+    wandb.init(project='cs260d', entity='chenda_playground',
+               name=args.save_dir.split('/')[-1],
+               config=args)
 
 # Set up logging and output locations
 logger = logging.getLogger(args.save_dir.split('/')[-1] + time.strftime("-%Y-%m-%d-%H-%M-%S"))

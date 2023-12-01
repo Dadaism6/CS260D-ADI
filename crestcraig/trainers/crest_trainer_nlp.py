@@ -1,5 +1,5 @@
 from utils import Adahessian
-
+import os
 from crestcraig.trainers.subset_trainer_nlp import *
 
 
@@ -354,6 +354,11 @@ class NLPCRESTTrainer(NLPSubsetTrainer):
         self.subset = np.concatenate(self.subset)
         self.subset_weights = np.concatenate(self.subset_weights)
         self.random_sets = np.concatenate(self.random_sets)
+        if self.args.save_subset:
+            save_path = os.path.join(self.args.save_subset_dir, "subset_epoch{}_step{}.npz")
+            np.savez('my_arrays.npz', subset=self.subset, subset_weights=self.subset_weights,
+                     random_sets=self.random_sets)
+
 
 
 

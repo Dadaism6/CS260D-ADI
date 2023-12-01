@@ -57,6 +57,11 @@ class NLPSubsetTrainer(NLPBaseTrainer):
         if self.args.cache_dataset and self.args.clean_cache_iteration:
             self.train_dataset.clean()
             self._update_train_loader_and_weights()
+        if self.args.use_wandb:
+            wandb.log({
+                "epoch": epoch,
+                "train_loss": loss.item(),
+                "train_acc": train_acc})
 
     def _get_train_output(self):
         """
