@@ -1,6 +1,6 @@
 from utils import Adahessian
 
-from .subset_trainer import *
+from crestcraig.trainers.subset_trainer import *
 
 
 class CRESTTrainer(SubsetTrainer):

@@ -8,8 +8,8 @@ import torch.nn as nn
 from tqdm import tqdm
 
 import wandb
-from datasets import IndexedDataset
-from utils import GradualWarmupScheduler
+from crestcraig.datasets.indexed_dataset import IndexedDataset
+from crestcraig.utils import GradualWarmupScheduler
 
 
 class AverageMeter:

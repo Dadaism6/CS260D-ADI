@@ -25,7 +25,8 @@ import torch.optim
 import torch.utils.data
 import torchvision
 
-from datasets import IndexedDataset, ArabicIndexedDataset
+from crestcraig.datasets.indexed_dataset import IndexedDataset
+from crestcraig.datasets.arabic_dataset import ArabicIndexedDataset
 # from models import *
 
 # Use CUDA if available and set random seed for reproducibility
@@ -87,8 +88,8 @@ def main(args):
     if args.arch == "transformer":
 
         # Load datasets
-        train_dataset = ArabicIndexedDataset(args, train=True)
-        val_dataset = ArabicIndexedDataset(args, train=False)
+        train_dataset = ArabicIndexedDataset(args, split_type="train")
+        val_dataset = ArabicIndexedDataset(args, split_type="val")
         val_loader = torch.utils.data.DataLoader(
             val_dataset,
             batch_size=args.batch_size,
@@ -108,15 +109,15 @@ def main(args):
 
 
     if args.selection_method == "none":
-        from trainers import BaseTrainer
-        trainer = BaseTrainer(
+        from crestcraig.trainers.base_trainer_nlp import NLPBaseTrainer
+        trainer = NLPBaseTrainer(
             args,
             model,
             train_dataset,
             val_loader,
         )
     elif args.selection_method == "random":
-        from trainers import RandomTrainer
+        from crestcraig.trainers.random_trainer import RandomTrainer
         trainer = RandomTrainer(
             args,
             model,
@@ -124,7 +125,7 @@ def main(args):
             val_loader,
         )
     elif args.selection_method == "crest":
-        from trainers import CRESTTrainer
+        from crestcraig.trainers.crest_trainer import CRESTTrainer
         trainer = CRESTTrainer(
             args,
             model,

@@ -1,4 +1,4 @@
-from .subset_trainer import *
+from crestcraig.trainers.subset_trainer import *
 
 
 class RandomTrainer(SubsetTrainer):

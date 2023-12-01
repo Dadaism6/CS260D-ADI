@@ -1,5 +1,5 @@
 import torchdatasets as td
-from datasets.datasets import get_dataset
+from crestcraig.datasets.get_data import get_dataset
 
 
 class IndexedDataset(td.Dataset):

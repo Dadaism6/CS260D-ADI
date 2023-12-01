@@ -1,7 +1,7 @@
 # a trainer class that inherits from BaseTrainer and only trains on a subset of the data selected at the beginning of every epoch
 from .base_trainer import *
 from torch.utils.data import Subset, DataLoader
-from datasets import SubsetGenerator
+from crestcraig.datasets.subset import SubsetGenerator
 
 class SubsetTrainer(BaseTrainer):
     def __init__(

@@ -17,7 +17,7 @@ def get_args():
     parser.add_argument("--arch", default="transformer", choices=['transformer','resnet20', 'resnet18', 'resnet50'],
         help="model architecture")
     parser.add_argument('--data_dir', default='./data')
-    parser.add_argument('--dataset', default='cifar10', choices=['cifar10', 'cifar100','tinyimagenet'],
+    parser.add_argument('--dataset', default='Arabic', choices=['Arabic','cifar10', 'cifar100','tinyimagenet'],
                         help='dataset: ' + ' (default: cifar10)')
     parser.add_argument("--num_workers",default=4, type=int,
         help="number of data loading workers (default: 4)")
@@ -37,7 +37,7 @@ def get_args():
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
-    parser.add_argument("--selection_method", default="crest", choices=['none', 'random', 'crest'],
+    parser.add_argument("--selection_method", default="none", choices=['none', 'random', 'crest'],
         help="subset selection method")
     parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")
@@ -98,6 +98,8 @@ def get_args():
         args.num_classes = 100
     elif args.dataset == 'tinyimagenet':
         args.num_classes = 200
+    elif args.dataset == 'Arabic':
+        args.num_classes = 6
     else:
         raise NotImplementedError
     
