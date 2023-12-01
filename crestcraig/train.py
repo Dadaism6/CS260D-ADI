@@ -89,7 +89,8 @@ def main(args):
 
         # Load datasets
         train_dataset = ArabicIndexedDataset(args, split_type="train")
-        val_dataset = ArabicIndexedDataset(args, split_type="val")
+        args.train_size = len(train_dataset)
+        val_dataset = ArabicIndexedDataset(args, split_type="test")
         val_loader = torch.utils.data.DataLoader(
             val_dataset,
             batch_size=args.batch_size,
@@ -117,16 +118,16 @@ def main(args):
             val_loader,
         )
     elif args.selection_method == "random":
-        from crestcraig.trainers.random_trainer import RandomTrainer
-        trainer = RandomTrainer(
+        from crestcraig.trainers.random_trainer_nlp import NLPRandomTrainer
+        trainer = NLPRandomTrainer(
             args,
             model,
             train_dataset,
             val_loader,
         )
     elif args.selection_method == "crest":
-        from crestcraig.trainers.crest_trainer import CRESTTrainer
-        trainer = CRESTTrainer(
+        from crestcraig.trainers.crest_trainer_nlp import NLPCRESTTrainer
+        trainer = NLPCRESTTrainer(
             args,
             model,
             train_dataset,

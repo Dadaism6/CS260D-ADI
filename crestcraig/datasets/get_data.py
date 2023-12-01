@@ -6,7 +6,7 @@ from transformers import AutoTokenizer
 def get_dataset(args, split_type = "train"):
     label2id = {"MSA": 0, "MGH": 1, "EGY": 2, "LEV": 3, "IRQ": 4, "GLF": 5}
     if args.dataset == 'Arabic':
-        file_path = 'D:\\ucla\\cs260D\\CS260D-ADI\\full_cleaned_data.tsv'
+        file_path = '/mnt/d/ucla/cs260D/CS260D-ADI/full_cleaned_data.tsv'
 
         # Read the dataset
         df = pd.read_csv(file_path, sep='\t')
@@ -24,13 +24,14 @@ def get_dataset(args, split_type = "train"):
                 add_special_tokens=True,
                 truncation=True,
                 padding="max_length",
+                max_length=15,
                 return_attention_mask=True,
                 return_tensors='pt'
             )
             return {
-                'input_ids': encoded_dict['input_ids'][0].to(device),
-                'attention_mask': encoded_dict['attention_mask'][0].to(device),
-                'label': torch.tensor(label2id[dialect], dtype=torch.long).to(device)
+                'input_ids': encoded_dict['input_ids'][0],
+                'attention_mask': encoded_dict['attention_mask'][0],
+                'label': label2id[dialect]
             }
 
         # Check for GPU availability

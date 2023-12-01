@@ -19,7 +19,7 @@ def get_args():
     parser.add_argument('--data_dir', default='./data')
     parser.add_argument('--dataset', default='Arabic', choices=['Arabic','cifar10', 'cifar100','tinyimagenet'],
                         help='dataset: ' + ' (default: cifar10)')
-    parser.add_argument("--num_workers",default=4, type=int,
+    parser.add_argument("--num_workers",default=1, type=int,
         help="number of data loading workers (default: 4)")
     parser.add_argument("--epochs", default=200, type=int, metavar="N", 
         help="number of total epochs to run")
@@ -37,7 +37,7 @@ def get_args():
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
-    parser.add_argument("--selection_method", default="none", choices=['none', 'random', 'crest'],
+    parser.add_argument("--selection_method", default="crest", choices=['none', 'random', 'crest'],
         help="subset selection method")
     parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")

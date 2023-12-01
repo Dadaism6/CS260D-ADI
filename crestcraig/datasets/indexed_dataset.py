@@ -1,3 +1,5 @@
+import typing
+
 import torchdatasets as td
 from crestcraig.datasets.get_data import get_dataset
 

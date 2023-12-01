@@ -53,6 +53,7 @@ class NLPBaseTrainer(BaseTrainer):
         input_ids = batch['input_ids'].to(self.args.device)
         attention_mask = batch['attention_mask'].to(self.args.device)
         labels = batch['label'].to(self.args.device)
+        data_idx = batch['index']
 
         # Forward pass
         forward_start = time.time()
@@ -62,6 +63,7 @@ class NLPBaseTrainer(BaseTrainer):
 
         # Extract the loss
         loss = outputs.loss
+        loss = (loss * self.train_weights[data_idx]).mean()
 
         # Backward pass
         backward_start = time.time()
