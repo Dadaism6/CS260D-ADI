@@ -21,7 +21,7 @@ def get_args():
                         help='dataset: ' + ' (default: cifar10)')
     parser.add_argument("--num_workers",default=1, type=int,
         help="number of data loading workers (default: 4)")
-    parser.add_argument("--epochs", default=200, type=int, metavar="N", 
+    parser.add_argument("--epochs", default=20, type=int, metavar="N",
         help="number of total epochs to run")
     parser.add_argument("--resume_from_epoch", default=0, type=int,
         help="resume from a specific epoch")
@@ -37,7 +37,7 @@ def get_args():
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
-    parser.add_argument("--selection_method", default="random", choices=['none', 'random', 'crest'],
+    parser.add_argument("--selection_method", default="crest", choices=['none', 'random', 'crest'],
         help="subset selection method")
     parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")
@@ -45,7 +45,7 @@ def get_args():
     parser.add_argument("--gamma", type=float, default=0.1, help="learning rate decay parameter")
     parser.add_argument('--seed', default=0, type=int, help="random seed")
     parser.add_argument("--runs", type=int, help="num runs", default=1)
-    parser.add_argument("--warm_start_epochs", default=20, type=int, help="epochs to warm start learning rate")
+    parser.add_argument("--warm_start_epochs", default=10, type=int, help="epochs to warm start learning rate")
     parser.add_argument("--subset_start_epoch", default=0, type=int, help="epoch to start subset selection")
 
     # data augmentation options

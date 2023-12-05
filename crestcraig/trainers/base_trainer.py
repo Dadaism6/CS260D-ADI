@@ -127,6 +127,10 @@ class BaseTrainer:
                 wandb.log(
                     {
                         "epoch": epoch,
+                        "train_loss": self.train_loss.val,
+                        "train_loss_mean": self.train_loss.avg,
+                        "train_acc": self.train_acc.val,
+                        "train_acc_mean": self.train_acc.avg,
                         "val_loss": self.val_loss,
                         "val_acc": self.val_acc,
                         "lr": self.optimizer.param_groups[0]["lr"],
@@ -206,7 +210,7 @@ class BaseTrainer:
         val_acc = 0
 
         with torch.no_grad():
-            for _, (data, target, _) in enumerate(self.val_loader):
+            for batch_idx, (data, target, _) in enumerate(self.val_loader):
                 data, target = data.cuda(), target.cuda()
 
                 output = self.model(data)
@@ -218,7 +222,12 @@ class BaseTrainer:
 
         val_loss /= len(self.val_loader.dataset)
         val_acc /= len(self.val_loader.dataset)
-
+        "Val Epoch: {}/{} Loss: {:.6f}\tAcc: {:.6f}".format(
+            epoch,
+            self.args.epochs,
+            val_loss,
+            val_acc,
+        )
         self.val_loss = val_loss
         self.val_acc = val_acc
 

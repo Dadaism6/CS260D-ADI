@@ -10,9 +10,20 @@ class ArabicIndexedDataset(td.Dataset):
 
     def __getitem__(self, index):
         data = self.dataset.iloc[index]
-        input_ids = torch.tensor(data['input_ids'].squeeze())
-        attention_mask = torch.tensor(data['attention_mask'].squeeze())
-        label = torch.tensor(data['label'])
+
+        # Check if input_ids and attention_mask are already tensors
+        input_ids = data['input_ids']
+        if not isinstance(input_ids, torch.Tensor):
+            input_ids = torch.tensor(input_ids.squeeze())
+
+        attention_mask = data['attention_mask']
+        if not isinstance(attention_mask, torch.Tensor):
+            attention_mask = torch.tensor(attention_mask.squeeze())
+
+        # Check if label is already a tensor
+        label = data['label']
+        if not isinstance(label, torch.Tensor):
+            label = torch.tensor(label)
 
         return {
             'input_ids': input_ids,
