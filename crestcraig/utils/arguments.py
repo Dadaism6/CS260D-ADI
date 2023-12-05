@@ -21,7 +21,7 @@ def get_args():
                         help='dataset: ' + ' (default: cifar10)')
     parser.add_argument("--num_workers",default=1, type=int,
         help="number of data loading workers (default: 4)")
-    parser.add_argument("--epochs", default=20, type=int, metavar="N",
+    parser.add_argument("--epochs", default=10, type=int, metavar="N",
         help="number of total epochs to run")
     parser.add_argument("--resume_from_epoch", default=0, type=int,
         help="resume from a specific epoch")
@@ -33,7 +33,7 @@ def get_args():
         help="weight decay (default: 5e-4)")
     parser.add_argument("--save-dir", default="./outputs", type=str,
         help="The directory used to save output")
-    parser.add_argument("--save_freq", type=int, default=200,
+    parser.add_argument("--save_freq", type=int, default=5,
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
