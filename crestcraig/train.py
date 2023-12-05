@@ -95,9 +95,17 @@ def main(args):
         # Load datasets
         train_dataset = ArabicIndexedDataset(args, split_type="train")
         args.train_size = len(train_dataset)
-        val_dataset = ArabicIndexedDataset(args, split_type="test")
+        val_dataset = ArabicIndexedDataset(args, split_type="dev")
         val_loader = torch.utils.data.DataLoader(
             val_dataset,
+            batch_size=args.batch_size,
+            shuffle=False,  # Typically, you don't shuffle the validation data
+            num_workers=args.num_workers,
+            pin_memory=True
+        )
+        test_dataset = ArabicIndexedDataset(args, split_type="test")
+        test_loader = torch.utils.data.DataLoader(
+            test_dataset,
             batch_size=args.batch_size,
             shuffle=False,  # Typically, you don't shuffle the validation data
             num_workers=args.num_workers,
@@ -121,6 +129,8 @@ def main(args):
             model,
             train_dataset,
             val_loader,
+            val_loader,
+            test_loader,
         )
     elif args.selection_method == "random":
         from crestcraig.trainers.random_trainer_nlp import NLPRandomTrainer
@@ -129,6 +139,7 @@ def main(args):
             model,
             train_dataset,
             val_loader,
+            test_loader,
         )
     elif args.selection_method == "crest":
         from crestcraig.trainers.crest_trainer_nlp import NLPCRESTTrainer
@@ -137,6 +148,7 @@ def main(args):
             model,
             train_dataset,
             val_loader,
+            test_loader,
         )
     else:
         raise NotImplementedError(f"Selection method {args.selection_method} not implemented.")
