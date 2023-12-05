@@ -5,3 +5,5 @@
 
 wandb/
 .idea/
+
+checkpoints/
