@@ -1,6 +1,6 @@
 *.log
 *.pyc
-*.json
+#*.json
 *.txt
 
 wandb/
