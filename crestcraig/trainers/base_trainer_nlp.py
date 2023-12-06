@@ -47,6 +47,8 @@ class NLPBaseTrainer(BaseTrainer):
     ):
         super().__init__(args, model, train_dataset, val_loader, test_dataset,train_weights)
         self.best_val = 0
+        self.steps_per_epoch = np.ceil(
+            int(len(self.train_dataset) * self.args.train_frac) / self.args.batch_size).astype(int)
 
     def _forward_and_backward(self, batch):
         self.optimizer.zero_grad()

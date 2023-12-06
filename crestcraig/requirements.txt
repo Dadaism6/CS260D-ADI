@@ -1,10 +1,9 @@
-numpy==1.20.1
 scikit_learn==1.2.2
-submodlib
-torch==1.9.1
+torch==2.1.0
 torchdatasets==0.2.0
-torchvision==0.10.1
+torchvision
 tqdm==4.59.0
 wandb==0.12.21
 pandas
 transformers
+numpy

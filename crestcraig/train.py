@@ -104,13 +104,6 @@ def main(args):
             pin_memory=True
         )
         test_dataset = ArabicIndexedDataset(args, split_type="test")
-        test_loader = torch.utils.data.DataLoader(
-            test_dataset,
-            batch_size=args.batch_size,
-            shuffle=False,  # Typically, you don't shuffle the validation data
-            num_workers=args.num_workers,
-            pin_memory=True
-        )
 
         model = AutoModelForSequenceClassification.from_pretrained(
             'CAMeL-Lab/bert-base-arabic-camelbert-mix',
@@ -130,7 +123,7 @@ def main(args):
             train_dataset,
             val_loader,
             val_loader,
-            test_loader,
+            test_dataset,
         )
     elif args.selection_method == "random":
         from crestcraig.trainers.random_trainer_nlp import NLPRandomTrainer
@@ -139,7 +132,7 @@ def main(args):
             model,
             train_dataset,
             val_loader,
-            test_loader,
+            test_dataset,
         )
     elif args.selection_method == "crest":
         from crestcraig.trainers.crest_trainer_nlp import NLPCRESTTrainer
@@ -148,7 +141,7 @@ def main(args):
             model,
             train_dataset,
             val_loader,
-            test_loader,
+            test_dataset,
         )
     else:
         raise NotImplementedError(f"Selection method {args.selection_method} not implemented.")

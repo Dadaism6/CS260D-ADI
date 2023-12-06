@@ -84,19 +84,23 @@ class BaseTrainer:
             self.model.parameters(), lr=args.lr, weight_decay=args.weight_decay
         )
 
-        lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            self.optimizer,
-            milestones=args.lr_milestones,
-            last_epoch=-1,
-            gamma=args.gamma,
-        )
+        # self.lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        #     self.optimizer,
+        #     milestones=args.lr_milestones,
+        #     last_epoch=-1,
+        #     gamma=args.gamma,
+        # )
+        self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(self.optimizer,
+                       max_lr=self.args.lr,
+                       steps_per_epoch=len(self.train_loader),
+                       epochs=self.args.epochs)
 
-        self.lr_scheduler = GradualWarmupScheduler(
-            self.optimizer,
-            multiplier=1,
-            total_epoch=args.warm_start_epochs,
-            after_scheduler=lr_scheduler,
-        )
+        # self.lr_scheduler = GradualWarmupScheduler(
+        #     self.optimizer,
+        #     multiplier=1,
+        #     total_epoch=args.warm_start_epochs,
+        #     after_scheduler=lr_scheduler,
+        # )
 
         self.train_criterion = nn.CrossEntropyLoss(reduction="none").to(args.device)
         self.val_criterion = nn.CrossEntropyLoss().to(args.device)

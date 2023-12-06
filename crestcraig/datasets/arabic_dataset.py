@@ -12,7 +12,7 @@ class ArabicIndexedDataset(td.Dataset):
                       'BH': 10, 'MA': 11,
                       'OM': 12, 'KW': 13, 'SA': 14, 'DZ': 15, 'YE': 16, 'SD': 17, 'QA': 18, 'DJ': 19, 'SO': 20,
                       'MR': 21, 'MSA': 22}
-        self.id2country = {v: k for k, v in country2id.items()}
+        self.id2country = {v: k for k, v in self.country2id.items()}
 
     def __getitem__(self, index):
         data = self.dataset.iloc[index]

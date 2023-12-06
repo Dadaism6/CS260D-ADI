@@ -33,7 +33,7 @@ def get_args():
         help="weight decay (default: 5e-4)")
     parser.add_argument("--save-dir", default="./outputs", type=str,
         help="The directory used to save output")
-    parser.add_argument("--save_freq", type=int, default=5,
+    parser.add_argument("--save_freq", type=int, default=1,
         help="Saves checkpoints at every specified number of epochs")
     parser.add_argument("--gpu", type=int, nargs='+', default=[0])
 
@@ -41,7 +41,7 @@ def get_args():
         help="subset selection method")
     parser.add_argument("--smtk", type=int, help="smtk", default=0) # default=0 use submodular to select subset, 1 use craig to select subset
     parser.add_argument("--train_frac", "-s", type=float, default=0.1, help="training fraction")
-    parser.add_argument("--lr_milestones", type=int, nargs='+', default=[100,150])
+    parser.add_argument("--lr_milestones", type=int, nargs='+', default=[1,2,3,4,5,6,7,8,9,10])
     parser.add_argument("--gamma", type=float, default=0.1, help="learning rate decay parameter")
     parser.add_argument('--seed', default=0, type=int, help="random seed")
     parser.add_argument("--runs", type=int, help="num runs", default=1)
