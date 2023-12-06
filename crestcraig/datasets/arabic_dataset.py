@@ -47,11 +47,13 @@ class ArabicIndexedDataset(td.Dataset):
 
     def clean(self):
         self._cachers = []
+
+    @property
     def group_partition(self):
         partition_keys = {
             (self.label2id[label], self.country2id[country]):[] for label in self.label2id.keys() for country in self.country2id.keys()
         }
-        for i in range(len(self.df)):
-            label,country = self.df.iloc[i]['dialect'], self.df.iloc[i]["country"]
+        for i in range(len(self.dataset)):
+            label,country = self.dataset.iloc[i]['label'], self.dataset.iloc[i]["country"]
             partition_keys[(label, country)].append(i)
         return partition_keys

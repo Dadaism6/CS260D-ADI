@@ -1,7 +1,7 @@
 import argparse
 import sys
 import time
-
+import json
 import numpy as np
 import torch
 import torch.nn as nn
@@ -12,6 +12,7 @@ import wandb
 from transformers import AutoModelForSequenceClassification, AdamW
 from crestcraig.trainers.base_trainer import BaseTrainer
 from transformers import BertTokenizer, BertForSequenceClassification, AdamW
+from torch.utils.data import DataLoader, SubsetRandomSampler
 class AverageMeter:
     """Computes and stores the average and current value"""
 
@@ -49,6 +50,13 @@ class NLPBaseTrainer(BaseTrainer):
         self.best_val = 0
         self.steps_per_epoch = np.ceil(
             int(len(self.train_dataset) * self.args.train_frac) / self.args.batch_size).astype(int)
+        self.label2id = {"MSA": 0, "MGH": 1, "EGY": 2, "LEV": 3, "IRQ": 4, "GLF": 5}
+        self.id2label = {v: k for k, v in self.label2id.items()}
+        self.country2id = {'PL': 0, 'JO': 1, 'SY': 2, 'LB': 3, 'TN': 4, 'unknown': 5, 'IQ': 6, 'EG': 7, 'LY': 8, 'AE': 9,
+                      'BH': 10, 'MA': 11,
+                      'OM': 12, 'KW': 13, 'SA': 14, 'DZ': 15, 'YE': 16, 'SD': 17, 'QA': 18, 'DJ': 19, 'SO': 20,
+                      'MR': 21, 'MSA': 22}
+        self.id2country = {v: k for k, v in self.country2id.items()}
 
     def _forward_and_backward(self, batch):
         self.optimizer.zero_grad()
@@ -231,11 +239,16 @@ class NLPBaseTrainer(BaseTrainer):
         num_correct = 0
         model.eval()
         step = 0
+        # single_batch = next(iter(loader))
+
+        # Print the type and contents of the batch
+        # print(type(single_batch))
+        # print(single_batch)
         with torch.no_grad():
-            for batch, index in loader:
+            for batch in loader:
                 input_ids = batch['input_ids'].to(device)
                 attention_mask = batch['attention_mask'].to(device)
-                labels = batch['labels'].to(device)
+                labels = batch['label'].to(device)
                 outputs = model(input_ids, attention_mask=attention_mask)
                 logits = outputs.logits
                 predictions = torch.argmax(logits, dim=-1)
@@ -262,8 +275,9 @@ class NLPBaseTrainer(BaseTrainer):
         for key in tqdm(sorted(group_partition.keys()), "Evaluating group-wise accuracy", ):
             if len(group_partition[key]) == 0:
                 continue
-            accuracies[key] = self.get_accuracy_no_tqdm(model, testloaders[key], device)
-            print(f"Group {key} Accuracy: {accuracies[key]}")
+            new_key = self.id2label[key[0]] + "-" + self.id2country[key[1]]
+            accuracies[new_key] = self.get_accuracy_no_tqdm(model, testloaders[key], device)
+            print(f"Group {new_key} Accuracy: {accuracies[new_key]}")
         save_path = self.args.save_dir + "/group_accuracy.json"
         with open(save_path, "w") as f:
             json.dump(accuracies, f)

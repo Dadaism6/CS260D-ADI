@@ -57,7 +57,7 @@ def get_args():
         help="clean the cache after iterating over the dataset")
 
     # Crest options
-    parser.add_argument("--save-subset", default=True, type=parse_bool, const=True, nargs='?',
+    parser.add_argument("--save-subset", default=False, type=parse_bool, const=True, nargs='?',
                         help="save select subset to subset dir")
     parser.add_argument("--save-subset-dir", default="./subsetoutputs", type=str,
                         help="The directory used to save selected subset")
