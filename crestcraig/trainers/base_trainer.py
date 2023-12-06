@@ -42,7 +42,7 @@ class BaseTrainer:
         model: nn.Module,
         train_dataset: IndexedDataset,
         val_loader: torch.utils.data.DataLoader,
-        test_loader: torch.utils.data.DataLoader,
+        test_dataset: IndexedDataset,
         train_weights: torch.Tensor = None,
     ):
         """
@@ -72,7 +72,7 @@ class BaseTrainer:
             pin_memory=True
         )
         self.val_loader = val_loader
-        self.test_loader = test_loader
+        self.test_dataset = test_dataset
         if train_weights is not None:
             self.train_weights = train_weights
         else:

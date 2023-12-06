@@ -5,6 +5,9 @@ import torch
 from transformers import AutoTokenizer
 def get_dataset(args, split_type = "train"):
     label2id = {"MSA": 0, "MGH": 1, "EGY": 2, "LEV": 3, "IRQ": 4, "GLF": 5}
+    country2id ={'PL': 0, 'JO': 1, 'SY': 2, 'LB': 3, 'TN': 4, 'unknown': 5, 'IQ': 6, 'EG': 7, 'LY': 8, 'AE': 9, 'BH': 10, 'MA': 11,
+     'OM': 12, 'KW': 13, 'SA': 14, 'DZ': 15, 'YE': 16, 'SD': 17, 'QA': 18, 'DJ': 19, 'SO': 20, 'MR': 21, 'MSA': 22}
+    id2country = {v: k for k, v in country2id.items()}
     if args.dataset == 'Arabic':
         file_path = '/mnt/d/ucla/cs260D/CS260D-ADI/full_cleaned_data.tsv'
 
@@ -47,7 +50,7 @@ def get_dataset(args, split_type = "train"):
             'attention_mask': [data['attention_mask'] for data in tokenized_data],
             'label': [data['label'] for data in tokenized_data],
             'source': filtered_df['source'],
-            'country': filtered_df['country'],
+            'country': [country2id[country] for country in filtered_df['country']],
             'num_arabic_chars': filtered_df['num_arabic_chars']
         })
 
